@@ -4,35 +4,40 @@
 const fs = require("fs");
 const path = require("path");
 
-const androidAppFolderPash = [
-  "platforms",
-  "android",
-  "app",
-];
-const extrasGradleFilePath = [
-  "build_scripts",
-  "build_extras",
-];
+const androidAppFolderPath = ["platforms", "android", "app"];
+const extrasGradleFilePath = ["build_scripts", "build_extras"];
 const extrasGradleFileName = "build-extras.gradle";
 
-const renameAndroidFileName = (oldPath, newPath) => {
-  if (!fs.existsSync(oldPath)) {
+const copyBuildExtras = (
+  androidAppFolderFullPath,
+  extrasGradleFileFullPath,
+  destinationFullPath
+) => {
+  if (
+    !fs.existsSync(
+      androidAppFolderFullPath || !fs.existsSync(extrasGradleFileFullPath)
+    )
+  ) {
+    console.log(`${extrasGradleFileFullPath} not found. Skipping`)
     return;
   }
-  fs.rename(oldPath, newPath, (err) => {
+  fs.copyFile(extrasGradleFileFullPath, destinationFullPath, (err) => {
     if (err) {
       console.error(err);
       return;
     }
-    console.log(
-      `Renamed the Android file as follows: ${oldPath} -> ${newPath}`
-    );
-  });
+    console.log('copied build-extras.gradle');
+  })
 };
 
 module.exports = (context) => {
-  extendGradle(
-    path.join(context.opts.projectRoot, ...appBundlePath, oldAppBundleFileName),
-    path.join(context.opts.projectRoot, ...appBundlePath, newAppBundleFileName)
+  copyBuildExtras(
+    path.join(context.opts.projectRoot, ...androidAppFolderPath),
+    path.join(
+      context.opts.projectRoot,
+      ...extrasGradleFilePath,
+      extrasGradleFileName
+    ),
+    path.join(context.opts.projectRoot, ...androidAppFolderPath, extrasGradleFileName)
   );
 };

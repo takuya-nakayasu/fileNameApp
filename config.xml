@@ -43,7 +43,6 @@
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <hook src="build_scripts/copy-build-extras.js" type="before_build" />
-        <hook src="build_scripts/rename-android-file-name.js" type="after_build" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
