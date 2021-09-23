@@ -7,4 +7,17 @@ android {
             outputFileName = "android-application-package.apk"
         }
     }
+
+    task finalizeBundleDebug(type: Sync) {
+        def path = "${buildDir}/outputs/bundle/debug/"
+        from(path)
+        include 'app-debug.aab'
+        destinationDir file(path)
+        rename 'app-debug.aab', 'android-app-bundle.aab'
+    }
+    tasks.whenTaskAdded { task ->
+        if (task.name.equals('bundleDebug')) {
+            task.finalizedBy finalizeBundleDebug
+        }
+    }
 }
